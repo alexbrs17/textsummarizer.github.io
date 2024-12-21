@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Text Summarizer</title>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+</head>
+<body>
+    
+<div class="header">
+    <h1>✨ AI-Powered Text Summarizer ✨</h1>
+    <p>Turn long texts into snappy summaries! 📝✨</p>
+</div>
+
+<div class="container">
+    <div class="container1">
+        <h2>Make your study become more mindful 📚💪</h2>
+        <p>Drop your long text here!!🚀</p>
+        <textarea id="userinput" rows="15" placeholder="Type your text here... 😎"></textarea>
+        <br>
+        <button class="button" id="summarizebutton" onclick="getlongtext()">Summarize It! 🔥</button>
+    </div>
+
+    <div class="container2">
+        <h2>Summary ✨</h2>
+        <p>Here's the summary mate! : 📝</p>
+        <textarea id="resulttextarea" rows="15" readonly></textarea>
+    </div>
+</div>
+<img src="https://media0.giphy.com/media/l3q2K5jinAlChoCLS/200w.gif?cid=6c09b95224oylxqywyx6rz9ojvy7mss8drwpsghknmfjkovc&ep=v1_gifs_search&rid=200w.gif&ct=g" alt="Loading..." class="gif" />
+<script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+  <script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+
+    // Fetch your API_KEY
+    const API_KEY = "AIzaSyAZU4pRlGb0AmMZSUQsBkKpolmakEHNmhs";
+    //accsess API Key
+    const genAI = new GoogleGenerativeAI(API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    async function ask(prompt) {
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+        return text;                
+    }
+
+    function getlongtext(){
+        let textvalue = document.getElementById('userinput').value;
+        console.log(textvalue);
+    }
+
+    async function generatesum() {
+        let textvalue = document.getElementById('userinput').value;
+        let sumresult = await ask("Please provide the output in plain text without any formatting symbols like ** for boldin the summary. Summarize this text and use good icon symbols before the sentence, use various icon symbols. Don't use any formatting symbols like ** or -" + textvalue)
+        document.getElementById('resulttextarea').value = sumresult;
+    }
+
+    document.getElementById('summarizebutton').addEventListener("click",generatesum)
+    // testing
+    // const prompt = "Write a story about a magic backpack.";
+
+    // const result = await model.generateContent(prompt);
+    // console.log(result.response.text());
+
+</script>
+</body>
+</html>
